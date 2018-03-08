@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+
+    <typeAliases>
+        <!--
+            针对单个别名定义
+            type:类型的路径
+            alias: 别名
+        -->
+        <typeAlias type="com.lpf.ssm.mybatis.po.User" alias="user"/>
+
+        <!--
+            批量别名定义：
+            指定包名， mybatis自动扫描包中的 po类，自动定义别名，别名就是类名（首字母大写，小写都可以）
+        -->
+        <package name="com.lpf.ssm.mybatis.po.User"/>
+    </typeAliases>
+
+    <!--mybatis中通过typeHandlers完成jdbc类型和java类型的转换。-->
+
+    <!-- 和spring 整合后，environment 配置将废除-->
+    <environments default="development">
+        <environment id="development">
+            <!--使用jdbc 事务管理，事务控制由 mybatis来控制 -->
+            <transactionManager type="JDBC"/>
+
+            <!-- 数据库连接池， 由mybatis 管理 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>   <!--这个driver 指向mybatis包下的 com/mybatis/jdbc/Driver.java 这个类文件，在该类中将注册这个驱动 -->
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/ssm"/>
+            </dataSource>
+
+        </environment>
+    </environments>
+    <!-- 在 SqlMapConfig.xml 文件中加载mapper 文件-->
+    <mappers>
+        <!-- 通过resource 加载单个映射文件 -->
+        <mapper  resource="sqlmap/UserMapper.xml"/>
+        <!-- mapper 读取文件的根目录是 classpath 开始-->
+        <mapper resource="mapper/UserMapper.xml"/>
+
+        <!--  通过mapper接口加载单个mapper
+            遵循一些规范： 需要将 mapper接口类名和mapper.xml 映射文件名称保持一致，且在一个目录中
+            上面规范的前提： 使用的是 mapper 代理方法
+        -->
+        <!--<mapper class="com.lpf.ssm.mybatis.mapper.UserMapper"/>-->
+
+        <!--  批量加载 mampper （推荐使用）
+            指定 mapper 接口的包名，mybatis 自动扫描包下边所有mapper 接口进行加载
+            遵循的一些规范： 需要将mapper 接口类和mapper.xml 映射文件名称保持一致，且在一个目录中
+            上面规范的前提： 使用的mapper 代理方法
+        -->
+        <!--<package name="com.lpf.ssm.mybatis.mapper"/>-->
+    </mappers>
+    <!-- 单个别名定义 -->
+</configuration>
